@@ -41,6 +41,17 @@ public class ChronosCouriersApplication {
                                 break;
                             }
 
+                            System.out.print("Enter package volume (1-100): ");
+                            int volume = Integer.parseInt(scanner.nextLine());
+                            try {
+                                if (volume < 1 || volume > 100) {
+                                    throw new IllegalArgumentException("Volume must be between 1 and 100 inclusive.");
+                                }
+                            } catch (NumberFormatException e) {
+                                System.err.println("Invalid input: Volume must be an integer.");
+                                System.err.flush();
+                            }
+
                             System.out.print("Is Fragile? (Y/N): ");
                             String fragileInput = scanner.nextLine().trim().toLowerCase();
 
@@ -53,7 +64,7 @@ public class ChronosCouriersApplication {
                                 throw new IllegalArgumentException("Invalid input for 'Is Fragile'. Please enter Y or N.");
                             }
 
-                            createPackage.placeOrder(id, priority, fragile);
+                            createPackage.placeOrder(id, priority, fragile, volume);
 
                         } catch (CreatePackage.PackageAlreadyExistsException |
                                  CreatePackage.InvalidPackageDataException e) {

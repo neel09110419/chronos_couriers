@@ -8,12 +8,15 @@ public class Package {
     private final boolean fragile;
     private PackageStatus status;
     private String assignedRiderId;
+    private final int volume;
 
-    public Package(String id, PackagePriorityType priority, long orderTime, long deadline, boolean fragile) {
+    public Package(String id, PackagePriorityType priority, long orderTime, long deadline, boolean fragile, int volume) {
         this.id = id;
         this.priority = priority;
         this.orderTime = orderTime;
         this.deadline = deadline;
+        this.volume = volume;
+        this.status = PackageStatus.PENDING;
         this.fragile = fragile;
     }
 
@@ -51,5 +54,9 @@ public class Package {
 
     public void setAssignedRiderId(String assignedRiderId) {
         this.assignedRiderId = assignedRiderId;
+    }
+
+    public int getVolume() {
+        return volume;
     }
 }

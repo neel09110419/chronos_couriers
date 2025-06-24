@@ -12,7 +12,7 @@ public class CreatePackage {
 
     private final Map<String, Package> packageMap = new HashMap<>();
 
-    public void placeOrder(String id, PackagePriorityType priority, boolean fragile)
+    public void placeOrder(String id, PackagePriorityType priority, boolean fragile, int volume)
             throws PackageAlreadyExistsException, InvalidPackageDataException {
         try {
             if (id == null || priority == null) {
@@ -28,11 +28,18 @@ public class CreatePackage {
                     ? orderTime + 1 * 24 * 60 * 60 * 1000L
                     : orderTime + 3 * 24 * 60 * 60 * 1000L;
 
-            Package newPackage = new Package(id, priority, orderTime, deadline, fragile);
+            Package newPackage = new Package(id, priority, orderTime, deadline, fragile, volume);
             packageMap.put(id, newPackage);
 
-            System.out.println("Package '" + id + "' placed with priority " + priority +
-                    " and deadline " + new Date(deadline));
+            System.out.println("\nPackage Created Successfully!");
+            System.out.println("------------------------------------");
+            System.out.println("Package ID     : " + id);
+            System.out.println("Priority       : " + priority);
+            System.out.println("Fragile        : " + (fragile ? "Yes" : "No"));
+            System.out.println("Volume         : " + volume);
+            System.out.println("Order Time     : " + new Date(orderTime));
+            System.out.println("Deadline       : " + new Date(deadline));
+            System.out.println("------------------------------------\n");
 
         } catch (PackageAlreadyExistsException | InvalidPackageDataException e) {
             throw e; // known custom exceptions
