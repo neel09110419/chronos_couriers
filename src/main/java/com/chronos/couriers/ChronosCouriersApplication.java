@@ -10,27 +10,75 @@ import java.util.Scanner;
 @SpringBootApplication
 public class ChronosCouriersApplication {
 
-	public static void main(String[] args) {
-		Scanner scanner = new Scanner(System.in);
-		CreatePackage createPackage = new CreatePackage();
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        CreatePackage createPackage = new CreatePackage();
 
-		try {
-			System.out.print("Enter Package ID: ");
-			String id = scanner.nextLine();
+        try {
+            boolean running = true;
+            while (running) {
+                System.out.println("\n--- Chronos Couriers CLI ---");
+                System.out.println("1. Place Order");
+                System.out.println("2. Exit");
+                System.out.print("Enter your choice: ");
+                String choice = scanner.nextLine();
 
-			System.out.print("Enter Priority (EXPRESS/STANDARD): ");
-			PackagePriorityType priority = PackagePriorityType.valueOf(scanner.nextLine().toUpperCase());
+                switch (choice) {
+                    case "1":
+                        try {
+                            System.out.print("Enter Package ID: ");
+                            String id = scanner.nextLine();
 
-			System.out.print("Is Fragile? (true/false): ");
-			boolean fragile = Boolean.parseBoolean(scanner.nextLine());
+                            System.out.print("Enter Priority (EXPRESS/STANDARD): ");
+                            PackagePriorityType priority;
 
-			createPackage.placeOrder(id, priority, fragile);
+                            try {
+                                String input = scanner.nextLine().toUpperCase();
+                                priority = PackagePriorityType.valueOf(input);
+                            } catch (IllegalArgumentException e) {
+                                System.err.println("Invalid input for 'Priority'. Please enter EXPRESS or STANDARD.");
+                                System.err.flush();
+                                break;
+                            }
 
-		} catch (CreatePackage.PackageAlreadyExistsException |
-				 CreatePackage.InvalidPackageDataException e) {
-			System.err.println("Error placing package: " + e.getMessage());
-		} catch (Exception e) {
-			System.err.println("Unexpected error: " + e.getMessage());
-		}
-	}
+                            System.out.print("Is Fragile? (Y/N): ");
+                            String fragileInput = scanner.nextLine().trim().toLowerCase();
+
+                            boolean fragile;
+                            if (fragileInput.equals("y")) {
+                                fragile = true;
+                            } else if (fragileInput.equals("n")) {
+                                fragile = false;
+                            } else {
+                                throw new IllegalArgumentException("Invalid input for 'Is Fragile'. Please enter Y or N.");
+                            }
+
+                            createPackage.placeOrder(id, priority, fragile);
+
+                        } catch (CreatePackage.PackageAlreadyExistsException |
+                                 CreatePackage.InvalidPackageDataException e) {
+                            System.err.println("Error placing package: " + e.getMessage());
+                        } catch (IllegalArgumentException e) {
+                            System.err.println("Invalid input: " + e.getMessage());
+                        } catch (Exception e) {
+                            System.err.println("Unexpected error: " + e.getMessage());
+                        }
+                        break;
+
+                    case "2":
+                        System.out.println("Exiting Chronos Couriers...");
+                        running = false;
+                        break;
+
+                    default:
+                        System.out.println("Invalid choice. Please enter a number between 1 or 2.");
+                }
+            }
+
+            scanner.close();
+
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
+        }
+    }
 }
