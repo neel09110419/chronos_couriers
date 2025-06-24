@@ -3,6 +3,8 @@ package com.chronos.couriers.model.packageinfo;
 public enum PackageStatus {
     PENDING,
     ASSIGNED,
-    PICKED_UP,
-    DELIVERED
+    OUT_FOR_DELIVERY,
+    DELIVERED,
+    UNDELIVERED,
+    CANCELLED
 }

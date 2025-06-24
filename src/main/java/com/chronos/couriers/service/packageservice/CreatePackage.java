@@ -1,4 +1,4 @@
-package com.chronos.couriers.service;
+package com.chronos.couriers.service.packageservice;
 
 import com.chronos.couriers.model.packageinfo.PackagePaymentStatus;
 import com.chronos.couriers.model.packageinfo.PackagePriorityType;

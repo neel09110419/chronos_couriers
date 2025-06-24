@@ -2,7 +2,8 @@ package com.chronos.couriers;
 
 import com.chronos.couriers.model.packageinfo.PackagePaymentStatus;
 import com.chronos.couriers.model.packageinfo.PackagePriorityType;
-import com.chronos.couriers.service.CreatePackage;
+import com.chronos.couriers.service.packageservice.CreatePackage;
+import com.chronos.couriers.service.riderservice.CreateRider;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Scanner;
@@ -13,12 +14,14 @@ public class ChronosCouriersApplication {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         CreatePackage createPackage = new CreatePackage();
+        CreateRider createRider = new CreateRider();
 
         try {
             boolean running = true;
             while (running) {
                 System.out.println("\n--- Chronos Couriers CLI ---");
                 System.out.println("1. Place Order");
+                System.out.println("2. Create Rider");
                 System.out.println("2. Exit");
                 System.out.print("Enter your choice: ");
                 String choice = scanner.nextLine();
@@ -89,12 +92,60 @@ public class ChronosCouriersApplication {
                         break;
 
                     case "2":
+                        try {
+                            System.out.print("Enter Rider ID: ");
+                            String id = scanner.nextLine().trim();
+                            if (id.isEmpty()) throw new IllegalArgumentException("Rider ID cannot be empty.");
+
+                            if (createRider.getRiderMap().containsKey(id)) {
+                                throw new IllegalArgumentException("Rider with ID '" + id + "' already exists.");
+                            }
+
+                            System.out.print("Enter Rider Name: ");
+                            String name = scanner.nextLine().trim();
+                            if (name.isEmpty()) throw new IllegalArgumentException("Rider name cannot be empty.");
+
+                            System.out.print("Enter Reliability Rating (0 to 5): ");
+                            String ratingInput = scanner.nextLine().trim();
+                            int rating;
+                            try {
+                                rating = Integer.parseInt(ratingInput);
+                                if (rating < 0 || rating > 5) {
+                                    throw new IllegalArgumentException("Reliability rating must be between 0 and 5.");
+                                }
+                            } catch (NumberFormatException e) {
+                                throw new IllegalArgumentException("Reliability rating must be a valid number.");
+                            }
+
+                            System.out.print("Can Handle Fragile Items? (Y/N): ");
+                            String fragileInput = scanner.nextLine().trim().toLowerCase();
+                            boolean canHandleFragile;
+                            if (fragileInput.equals("y")) {
+                                canHandleFragile = true;
+                            } else if (fragileInput.equals("n")) {
+                                canHandleFragile = false;
+                            } else {
+                                throw new IllegalArgumentException("Invalid input for fragile support. Use Y or N.");
+                            }
+
+                            createRider.createRider(id, name, rating, canHandleFragile);
+
+                        } catch (IllegalArgumentException e) {
+                            System.err.println("Error: " + e.getMessage());
+                            System.err.flush();
+                        } catch (Exception e) {
+                            System.err.println("Unexpected error: " + e.getMessage());
+                            System.err.flush();
+                        }
+                        break;
+
+                    case "3":
                         System.out.println("Exiting Chronos Couriers...");
                         running = false;
                         break;
 
                     default:
-                        System.out.println("Invalid choice. Please enter a number between 1 or 2.");
+                        System.out.println("Invalid choice. Please enter a number between 1 or 3.");
                 }
             }
 
