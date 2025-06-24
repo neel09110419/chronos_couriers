@@ -1,8 +1,8 @@
 package com.chronos.couriers;
 
-import com.chronos.couriers.model.PackagePriorityType;
+import com.chronos.couriers.model.packageinfo.PackagePaymentStatus;
+import com.chronos.couriers.model.packageinfo.PackagePriorityType;
 import com.chronos.couriers.service.CreatePackage;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Scanner;
@@ -64,7 +64,19 @@ public class ChronosCouriersApplication {
                                 throw new IllegalArgumentException("Invalid input for 'Is Fragile'. Please enter Y or N.");
                             }
 
-                            createPackage.placeOrder(id, priority, fragile, volume);
+                            System.out.print("Enter Payment Status (PREPAID/COD): ");
+                            PackagePaymentStatus packagePaymentStatus;
+
+                            try {
+                                String input = scanner.nextLine().toUpperCase();
+                                packagePaymentStatus = PackagePaymentStatus.valueOf(input);
+                            } catch (IllegalArgumentException e) {
+                                System.err.println("Invalid input for 'Payment Status'. Please enter PREPAID or COD.");
+                                System.err.flush();
+                                break;
+                            }
+
+                            createPackage.placeOrder(id, priority, fragile, volume, packagePaymentStatus);
 
                         } catch (CreatePackage.PackageAlreadyExistsException |
                                  CreatePackage.InvalidPackageDataException e) {

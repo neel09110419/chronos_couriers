@@ -1,7 +1,8 @@
 package com.chronos.couriers.service;
 
-import com.chronos.couriers.model.PackagePriorityType;
-import com.chronos.couriers.model.Package;
+import com.chronos.couriers.model.packageinfo.PackagePaymentStatus;
+import com.chronos.couriers.model.packageinfo.PackagePriorityType;
+import com.chronos.couriers.model.packageinfo.Package;
 
 import java.util.Collection;
 import java.util.Date;
@@ -12,7 +13,7 @@ public class CreatePackage {
 
     private final Map<String, Package> packageMap = new HashMap<>();
 
-    public void placeOrder(String id, PackagePriorityType priority, boolean fragile, int volume)
+    public void placeOrder(String id, PackagePriorityType priority, boolean fragile, int volume, PackagePaymentStatus packagePaymentStatus)
             throws PackageAlreadyExistsException, InvalidPackageDataException {
         try {
             if (id == null || priority == null) {
@@ -28,7 +29,7 @@ public class CreatePackage {
                     ? orderTime + 1 * 24 * 60 * 60 * 1000L
                     : orderTime + 3 * 24 * 60 * 60 * 1000L;
 
-            Package newPackage = new Package(id, priority, orderTime, deadline, fragile, volume);
+            Package newPackage = new Package(id, priority, orderTime, deadline, fragile, volume, packagePaymentStatus);
             packageMap.put(id, newPackage);
 
             System.out.println("\nPackage Created Successfully!");
@@ -37,6 +38,7 @@ public class CreatePackage {
             System.out.println("Priority       : " + priority);
             System.out.println("Fragile        : " + (fragile ? "Yes" : "No"));
             System.out.println("Volume         : " + volume);
+            System.out.println("Payment Status : " + packagePaymentStatus);
             System.out.println("Order Time     : " + new Date(orderTime));
             System.out.println("Deadline       : " + new Date(deadline));
             System.out.println("------------------------------------\n");

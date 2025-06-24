@@ -1,4 +1,4 @@
-package com.chronos.couriers.model;
+package com.chronos.couriers.model.packageinfo;
 
 public class Package {
     private final String id;
@@ -9,8 +9,9 @@ public class Package {
     private PackageStatus status;
     private String assignedRiderId;
     private final int volume;
+    private PackagePaymentStatus packagePaymentStatus;
 
-    public Package(String id, PackagePriorityType priority, long orderTime, long deadline, boolean fragile, int volume) {
+    public Package(String id, PackagePriorityType priority, long orderTime, long deadline, boolean fragile, int volume, PackagePaymentStatus packagePaymentStatus) {
         this.id = id;
         this.priority = priority;
         this.orderTime = orderTime;
@@ -18,6 +19,7 @@ public class Package {
         this.volume = volume;
         this.status = PackageStatus.PENDING;
         this.fragile = fragile;
+        this.packagePaymentStatus = packagePaymentStatus;
     }
 
     public String getId() {
@@ -58,5 +60,13 @@ public class Package {
 
     public int getVolume() {
         return volume;
+    }
+
+    public PackagePaymentStatus getPackagePaymentStatus() {
+        return packagePaymentStatus;
+    }
+
+    public void setPackagePaymentStatus(PackagePaymentStatus packagePaymentStatus) {
+        this.packagePaymentStatus = packagePaymentStatus;
     }
 }

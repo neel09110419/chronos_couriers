@@ -1,4 +1,4 @@
-package com.chronos.couriers.model;
+package com.chronos.couriers.model.packageinfo;
 
 public enum PackageStatus {
     PENDING,
