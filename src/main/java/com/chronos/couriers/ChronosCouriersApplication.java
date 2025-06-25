@@ -2,6 +2,7 @@ package com.chronos.couriers;
 
 import com.chronos.couriers.model.packageinfo.PackagePaymentStatus;
 import com.chronos.couriers.model.packageinfo.PackagePriorityType;
+import com.chronos.couriers.service.audit.AuditService;
 import com.chronos.couriers.service.packageservice.CreatePackage;
 import com.chronos.couriers.service.packageservice.PackagePriority;
 import com.chronos.couriers.service.riderservice.AssignPackageToRider;
@@ -23,6 +24,7 @@ public class ChronosCouriersApplication {
         PackagePriority packagePriority = new PackagePriority();
         CreatePackage createPackage = new CreatePackage(packagePriority);
         CreateRider createRider = new CreateRider();
+        AuditService auditService = new AuditService();
 
         try {
             boolean running = true;
@@ -34,7 +36,8 @@ public class ChronosCouriersApplication {
                 System.out.println("4. Assign Packages to Riders");
                 System.out.println("5. View Packages By RiderId");
                 System.out.println("6. Update Package Delivery Status");
-                System.out.println("7. Exit");
+                System.out.println("7. View Missed EXPRESS Deliveries");
+                System.out.println("8. Exit");
                 System.out.print("Enter your choice: ");
                 String choice = scanner.nextLine();
 
@@ -174,6 +177,8 @@ public class ChronosCouriersApplication {
                                 System.out.println("Volume         : " + pkg.getVolume());
                                 System.out.println("Fragile        : " + (pkg.isFragile() ? "Yes" : "No"));
                                 System.out.println("Payment Status : " + pkg.getPackagePaymentStatus());
+                                System.out.println("Pickup Time    : " + pkg.getPickupTime());
+                                System.out.println("Delivered time : " + pkg.getDeliveryTime());
                                 System.out.println("Status         : " + pkg.getStatus());
                                 System.out.println("-----------------------------------------------------------");
                             }
@@ -194,12 +199,16 @@ public class ChronosCouriersApplication {
                         break;
 
                     case "7":
+                        auditService.getMissedExpressDeliveries(packagePriority);
+                        break;
+
+                    case "8":
                         System.out.println("Exiting Chronos Couriers...");
                         running = false;
                         break;
 
                     default:
-                        System.out.println("Invalid choice. Please enter a number between 1 or 7.");
+                        System.out.println("Invalid choice. Please enter a number between 1 or 8.");
                 }
             }
 

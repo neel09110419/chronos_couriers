@@ -11,6 +11,8 @@ public class Package {
     private PackageStatus status;
     private String assignedRiderId;
     private final int volume;
+    private long pickupTime;
+    private long deliveryTime;
     private PackagePaymentStatus packagePaymentStatus;
 
     public Package(String id, String receiverName, String receiverAddress, PackagePriorityType priority, long orderTime, long deadline, boolean fragile, int volume, PackagePaymentStatus packagePaymentStatus) {
@@ -72,6 +74,22 @@ public class Package {
 
     public int getVolume() {
         return volume;
+    }
+
+    public long getPickupTime() {
+        return pickupTime;
+    }
+
+    public void setPickupTime(long pickupTime) {
+        this.pickupTime = pickupTime;
+    }
+
+    public long getDeliveryTime() {
+        return deliveryTime;
+    }
+
+    public void setDeliveryTime(long deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 
     public PackagePaymentStatus getPackagePaymentStatus() {

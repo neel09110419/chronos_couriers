@@ -66,6 +66,7 @@ public class AssignPackageToRider {
                 if (fragileCompatible) {
                     // Assign package
                     pkg.setAssignedRiderId(rider.getRiderId());
+                    pkg.setPickupTime(System.currentTimeMillis());
                     pkg.setStatus(PackageStatus.OUT_FOR_DELIVERY);
                     rider.setCurrentVolumeLoad(rider.getCurrentVolumeLoad() + pkg.getVolume());
 

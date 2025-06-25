@@ -55,6 +55,7 @@ public class DeliveryStatusUpdate {
             System.out.print("Was payment received? (Y/N): ");
             String paidInput = scanner.nextLine().trim().toUpperCase();
             if (paidInput.equals("Y")) {
+                selectedPackage.setDeliveryTime(System.currentTimeMillis());
                 selectedPackage.setStatus(PackageStatus.DELIVERED);
             } else if (paidInput.equals("N")) {
                 selectedPackage.setStatus(PackageStatus.CANCELLED);
@@ -67,6 +68,7 @@ public class DeliveryStatusUpdate {
             String statusInput = scanner.nextLine().trim().toUpperCase();
             switch (statusInput) {
                 case "D":
+                    selectedPackage.setDeliveryTime(System.currentTimeMillis());
                     selectedPackage.setStatus(PackageStatus.DELIVERED);
                     break;
                 case "C":
