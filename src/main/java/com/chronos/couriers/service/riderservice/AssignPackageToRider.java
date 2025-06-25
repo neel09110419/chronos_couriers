@@ -3,8 +3,8 @@ package com.chronos.couriers.service.riderservice;
 import com.chronos.couriers.model.riderinfo.Rider;
 import com.chronos.couriers.model.riderinfo.RiderStatus;
 import com.chronos.couriers.model.packageinfo.Package;
-import com.chronos.couriers.service.packageservice.PackagePriority;
 import com.chronos.couriers.model.packageinfo.PackageStatus;
+import com.chronos.couriers.service.packageservice.PackagePriority;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
@@ -16,7 +16,7 @@ public class AssignPackageToRider {
         PriorityQueue<Package> tempQueue = new PriorityQueue<>(packagePriority.getPendingQueue());
 
         if (tempQueue.isEmpty()) {
-            System.out.println("No pending packages to assignPackageToRider.");
+            System.out.println("No pending packages to assign.");
             return;
         }
 
@@ -24,9 +24,10 @@ public class AssignPackageToRider {
 
         while (!tempQueue.isEmpty()) {
             Package pkg = tempQueue.poll();
-            if (!(pkg.getStatus() == PackageStatus.PENDING)) {
-                continue;
-            }
+
+            // Skip if package is not PENDING
+            if (pkg.getStatus() != PackageStatus.PENDING) continue;
+
             boolean assigned = false;
 
             for (Rider rider : createRider.getRiderMap().values().stream()
@@ -36,25 +37,34 @@ public class AssignPackageToRider {
 
                 int remainingCapacity = rider.getMaxLoad() - rider.getCurrentVolumeLoad();
 
+                // Skip if volume exceeds rider's remaining capacity
+                if (pkg.getVolume() > remainingCapacity) continue;
+
                 boolean fragileCompatible = true;
 
                 if (pkg.isFragile()) {
                     fragileCompatible = rider.isCanHandleFragile();
                 } else {
-
+                    // Check if fragile packages are still pending
                     boolean fragilePackagesRemain = tempQueue.stream().anyMatch(Package::isFragile);
-                    long availableFragileRiders = createRider.getRiderMap().values().stream()
+
+                    // Count available fragile-capable riders excluding current rider
+                    long otherFragileCapableRiders = createRider.getRiderMap().values().stream()
+                            .filter(r -> r != rider)
                             .filter(r -> r.getRiderStatus() == RiderStatus.AVAILABLE)
                             .filter(Rider::isCanHandleFragile)
                             .count();
 
-                    if (fragilePackagesRemain && rider.isCanHandleFragile() && availableFragileRiders == 1) {
-                        fragileCompatible = false;
+
+                    if (!fragilePackagesRemain && rider.isCanHandleFragile()) {
+                        if (pkg.getVolume() > (100 - rider.getCurrentVolumeLoad())) continue;
+
+                        fragileCompatible = true;
                     }
                 }
 
-                if (remainingCapacity >= pkg.getVolume() && fragileCompatible) {
-                    //  Assign package
+                if (fragileCompatible) {
+                    // Assign package
                     pkg.setAssignedRiderId(rider.getRiderId());
                     pkg.setStatus(PackageStatus.OUT_FOR_DELIVERY);
                     rider.setCurrentVolumeLoad(rider.getCurrentVolumeLoad() + pkg.getVolume());
@@ -66,10 +76,10 @@ public class AssignPackageToRider {
                     assigned = true;
                     assignedAny = true;
 
-                    // Check if rider can take more packages
+                    // Check if rider can carry any more packages
                     int updatedRemaining = rider.getMaxLoad() - rider.getCurrentVolumeLoad();
                     boolean canHandleMore = tempQueue.stream().anyMatch(p -> {
-                        boolean compatible = !p.isFragile() || rider.isCanHandleFragile(); // relaxation for non-fragile packages
+                        boolean compatible = !p.isFragile() || rider.isCanHandleFragile();
                         return p.getVolume() <= updatedRemaining && compatible;
                     });
 
@@ -91,7 +101,5 @@ public class AssignPackageToRider {
         if (!assignedAny) {
             System.out.println("No packages were assigned. Riders might be full or not compatible.");
         }
-
-
     }
 }
