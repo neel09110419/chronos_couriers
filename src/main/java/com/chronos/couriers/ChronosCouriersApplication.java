@@ -6,6 +6,7 @@ import com.chronos.couriers.service.packageservice.CreatePackage;
 import com.chronos.couriers.service.packageservice.PackagePriority;
 import com.chronos.couriers.service.riderservice.AssignPackageToRider;
 import com.chronos.couriers.service.riderservice.CreateRider;
+import com.chronos.couriers.service.riderservice.RidersAndAssignedPackages;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.chronos.couriers.model.packageinfo.Package;
 
@@ -28,9 +29,11 @@ public class ChronosCouriersApplication {
                 System.out.println("\n--- Chronos Couriers CLI ---");
                 System.out.println("1. Create Rider");
                 System.out.println("2. Create Order");
-                System.out.println("3. View Pending Package Queue");
+                System.out.println("3. View All Packages");
                 System.out.println("4. Assign Packages to Riders");
-                System.out.println("5. Exit");
+                System.out.println("5. View Packages By RiderId");
+                System.out.println("6. Update Package Delivery Status");
+                System.out.println("7. Exit");
                 System.out.print("Enter your choice: ");
                 String choice = scanner.nextLine();
 
@@ -88,6 +91,12 @@ public class ChronosCouriersApplication {
                             System.out.print("Enter Package ID: ");
                             String id = scanner.nextLine();
 
+                            System.out.print("Enter Receiver's Name: ");
+                            String receiverName = scanner.nextLine();
+
+                            System.out.print("Enter Receiver's Address: ");
+                            String receiverAddress = scanner.nextLine();
+
                             System.out.print("Enter Priority (EXPRESS/STANDARD): ");
                             PackagePriorityType priority;
 
@@ -135,7 +144,7 @@ public class ChronosCouriersApplication {
                                 break;
                             }
 
-                            createPackage.placeOrder(id, priority, fragile, volume, packagePaymentStatus);
+                            createPackage.placeOrder(id, receiverName, receiverAddress, priority, fragile, volume, packagePaymentStatus);
 
                         } catch (CreatePackage.PackageAlreadyExistsException |
                                  CreatePackage.InvalidPackageDataException e) {
@@ -176,12 +185,19 @@ public class ChronosCouriersApplication {
                         break;
 
                     case "5":
+                        RidersAndAssignedPackages.viewPackagesForRider(createRider, createPackage.getAllPackages());
+                        break;
+                        
+                    case "6":
+                        break;
+
+                    case "7":
                         System.out.println("Exiting Chronos Couriers...");
                         running = false;
                         break;
 
                     default:
-                        System.out.println("Invalid choice. Please enter a number between 1 or 5.");
+                        System.out.println("Invalid choice. Please enter a number between 1 or 7.");
                 }
             }
 

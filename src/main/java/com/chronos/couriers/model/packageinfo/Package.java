@@ -2,6 +2,8 @@ package com.chronos.couriers.model.packageinfo;
 
 public class Package {
     private final String id;
+    private final String receiverName;
+    private final String receiverAddress;
     private final PackagePriorityType priority;
     private final long orderTime;
     private final long deadline;
@@ -11,8 +13,10 @@ public class Package {
     private final int volume;
     private PackagePaymentStatus packagePaymentStatus;
 
-    public Package(String id, PackagePriorityType priority, long orderTime, long deadline, boolean fragile, int volume, PackagePaymentStatus packagePaymentStatus) {
+    public Package(String id, String receiverName, String receiverAddress, PackagePriorityType priority, long orderTime, long deadline, boolean fragile, int volume, PackagePaymentStatus packagePaymentStatus) {
         this.id = id;
+        this.receiverName = receiverName;
+        this.receiverAddress = receiverAddress;
         this.priority = priority;
         this.orderTime = orderTime;
         this.deadline = deadline;
@@ -24,6 +28,14 @@ public class Package {
 
     public String getId() {
         return id;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public String getReceiverAddress() {
+        return receiverAddress;
     }
 
     public PackagePriorityType getPriority() {

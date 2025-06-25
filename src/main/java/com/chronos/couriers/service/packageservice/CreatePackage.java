@@ -19,7 +19,7 @@ public class CreatePackage {
         this.packagePriority = packagePriority;
     }
 
-    public void placeOrder(String id, PackagePriorityType priority, boolean fragile, int volume, PackagePaymentStatus packagePaymentStatus)
+    public void placeOrder(String id, String receiverName, String receiverAddress, PackagePriorityType priority, boolean fragile, int volume, PackagePaymentStatus packagePaymentStatus)
             throws PackageAlreadyExistsException, InvalidPackageDataException {
         try {
             if (id == null || priority == null) {
@@ -35,7 +35,7 @@ public class CreatePackage {
                     ? orderTime + 1 * 24 * 60 * 60 * 1000L
                     : orderTime + 3 * 24 * 60 * 60 * 1000L;
 
-            Package newPackage = new Package(id, priority, orderTime, deadline, fragile, volume, packagePaymentStatus);
+            Package newPackage = new Package(id, receiverName, receiverAddress, priority, orderTime, deadline, fragile, volume, packagePaymentStatus);
             packageMap.put(id, newPackage);
 
             System.out.println("\nPackage Created Successfully!");
