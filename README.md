@@ -65,7 +65,8 @@ java -cp out com.chronos.couriers.ChronosCouriersApplication
 4. Assign Packages to Riders
 5. View Packages By RiderId
 6. Update Package Delivery Status
-7. Exit
+7. View Missed EXPRESS Deliveries
+8. Exit
 Enter your choice:
 
 1. Create Rider
@@ -106,7 +107,10 @@ All assigned packages
 6. Update Package Delivery Status
 Select a rider -> Choose a package assigned -> Update status:
 
+7. View Missed EXPRESS Deliveries
 If PREPAID: Mark as DELIVERED or CANCELLED directly
 If COD: Choose if customer paid or not
 	If paid: Mark DELIVERED
 	If not paid: Mark CANCELLED
+
+
