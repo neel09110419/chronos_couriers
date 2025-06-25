@@ -13,6 +13,12 @@ public class CreatePackage {
 
     private final Map<String, Package> packageMap = new HashMap<>();
 
+    private final PackagePriority packagePriority;
+
+    public CreatePackage(PackagePriority packagePriority) {
+        this.packagePriority = packagePriority;
+    }
+
     public void placeOrder(String id, PackagePriorityType priority, boolean fragile, int volume, PackagePaymentStatus packagePaymentStatus)
             throws PackageAlreadyExistsException, InvalidPackageDataException {
         try {
@@ -43,6 +49,8 @@ public class CreatePackage {
             System.out.println("Deadline       : " + new Date(deadline));
             System.out.println("------------------------------------\n");
 
+            packagePriority.addPackage(newPackage);
+
         } catch (PackageAlreadyExistsException | InvalidPackageDataException e) {
             throw e; // known custom exceptions
         } catch (Exception e) {
@@ -57,6 +65,8 @@ public class CreatePackage {
     public Collection<Package> getAllPackages() {
         return packageMap.values();
     }
+
+
 
     public static class PackageAlreadyExistsException extends Exception {
         public PackageAlreadyExistsException(String message) {

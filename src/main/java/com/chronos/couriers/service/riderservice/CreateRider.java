@@ -1,6 +1,7 @@
 package com.chronos.couriers.service.riderservice;
 
 import com.chronos.couriers.model.riderinfo.Rider;
+import com.chronos.couriers.model.riderinfo.RiderStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,4 +27,5 @@ public class CreateRider {
     public Map<String, Rider> getRiderMap() {
         return riderMap;
     }
+
 }

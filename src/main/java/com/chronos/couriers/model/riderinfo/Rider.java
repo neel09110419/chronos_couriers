@@ -9,6 +9,7 @@ public class Rider {
     private final int reliabilityRating;
     private final boolean canHandleFragile;
 
+
     public Rider(String riderId, String riderName, int reliabilityRating, boolean canHandleFragile) {
         this.riderId = riderId;
         this.riderName = riderName;
@@ -47,11 +48,12 @@ public class Rider {
         return maxLoad;
     }
 
-    public double getReliabilityRating() {
+    public int getReliabilityRating() {
         return reliabilityRating;
     }
 
     public boolean isCanHandleFragile() {
         return canHandleFragile;
     }
+
 }
