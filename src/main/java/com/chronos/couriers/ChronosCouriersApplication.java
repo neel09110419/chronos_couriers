@@ -6,6 +6,7 @@ import com.chronos.couriers.service.packageservice.CreatePackage;
 import com.chronos.couriers.service.packageservice.PackagePriority;
 import com.chronos.couriers.service.riderservice.AssignPackageToRider;
 import com.chronos.couriers.service.riderservice.CreateRider;
+import com.chronos.couriers.service.riderservice.DeliveryStatusUpdate;
 import com.chronos.couriers.service.riderservice.RidersAndAssignedPackages;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.chronos.couriers.model.packageinfo.Package;
@@ -187,8 +188,9 @@ public class ChronosCouriersApplication {
                     case "5":
                         RidersAndAssignedPackages.viewPackagesForRider(createRider, createPackage.getAllPackages());
                         break;
-                        
+
                     case "6":
+                        DeliveryStatusUpdate.updatePackageStatus(createRider, createPackage.getAllPackages().stream().toList());
                         break;
 
                     case "7":
