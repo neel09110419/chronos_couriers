@@ -107,10 +107,10 @@ All assigned packages
 6. Update Package Delivery Status
 Select a rider -> Choose a package assigned -> Update status:
 
-7. View Missed EXPRESS Deliveries
 If PREPAID: Mark as DELIVERED or CANCELLED directly
 If COD: Choose if customer paid or not
 	If paid: Mark DELIVERED
 	If not paid: Mark CANCELLED
 
+7. View Missed EXPRESS Deliveries
 
